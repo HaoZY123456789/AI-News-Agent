@@ -20,12 +20,12 @@ jobs:
       uses: actions/checkout@v4
       
     - name: 🐍 设置 Python 环境
-      uses: actions/setup-python@v4
+      uses: actions/setup-python@v5
       with:
         python-version: '3.11'
         
     - name: ☕ 设置 Java 环境
-      uses: actions/setup-java@v3
+      uses: actions/setup-java@v4
       with:
         distribution: 'temurin'
         java-version: '17'
@@ -65,7 +65,7 @@ jobs:
         ls -la bin/
         
     - name: 📤 上传 APK 文件
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: ai-news-agent-apk
         path: bin/*.apk
@@ -90,7 +90,7 @@ jobs:
         echo "5. 享受AI资讯智能体！🎊" >> build-report.md
         
     - name: 📋 上传构建报告
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: build-report
         path: build-report.md

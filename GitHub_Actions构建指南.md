@@ -75,6 +75,7 @@ git push -u origin main
 - ✅ Android SDK 33
 - ✅ Android NDK 25b
 - ✅ 自动接受SDK许可证
+- ✅ 最新稳定版本的GitHub Actions
 
 ### 📱 APK规格
 
