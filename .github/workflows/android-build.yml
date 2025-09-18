@@ -1,0 +1,96 @@
+name: 🤖 AI资讯智能体 Android APK 构建
+
+on:
+  push:
+    branches: [ main, master ]
+    paths:
+      - '**.py'
+      - 'buildozer.spec'
+      - 'config.ini'
+  pull_request:
+    branches: [ main, master ]
+  workflow_dispatch:  # 允许手动触发
+
+jobs:
+  build-android:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: 📦 检出代码
+      uses: actions/checkout@v4
+      
+    - name: 🐍 设置 Python 环境
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.11'
+        
+    - name: ☕ 设置 Java 环境
+      uses: actions/setup-java@v3
+      with:
+        distribution: 'temurin'
+        java-version: '17'
+        
+    - name: 🔧 安装系统依赖
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y \
+          autoconf \
+          libtool \
+          pkg-config \
+          zlib1g-dev \
+          libncurses5-dev \
+          libncursesw5-dev \
+          libtinfo5 \
+          cmake \
+          libffi-dev \
+          libssl-dev \
+          zip \
+          unzip
+          
+    - name: 📱 安装 Android 构建工具
+      run: |
+        pip install --upgrade pip
+        pip install buildozer cython
+        pip install -r requirements_android.txt
+        
+    - name: 🏗️ 构建 APK
+      run: |
+        export JAVA_HOME=$JAVA_HOME
+        cp buildozer-github.spec buildozer.spec
+        buildozer android debug
+        
+    - name: 📋 显示构建信息
+      run: |
+        echo "🎉 APK 构建完成！"
+        ls -la bin/
+        
+    - name: 📤 上传 APK 文件
+      uses: actions/upload-artifact@v3
+      with:
+        name: ai-news-agent-apk
+        path: bin/*.apk
+        retention-days: 30
+        
+    - name: 📊 生成构建报告
+      run: |
+        echo "## 🤖 AI资讯智能体 APK 构建报告" > build-report.md
+        echo "" >> build-report.md
+        echo "**构建时间:** $(date)" >> build-report.md
+        echo "**构建状态:** ✅ 成功" >> build-report.md
+        echo "**APK文件:**" >> build-report.md
+        echo "\`\`\`" >> build-report.md
+        ls -la bin/*.apk >> build-report.md
+        echo "\`\`\`" >> build-report.md
+        echo "" >> build-report.md
+        echo "### 📱 安装说明" >> build-report.md
+        echo "1. 下载上方的 APK 文件" >> build-report.md
+        echo "2. 在Android设备上开启"未知来源"安装权限" >> build-report.md
+        echo "3. 点击APK文件完成安装" >> build-report.md
+        echo "4. 首次运行时配置邮箱信息" >> build-report.md
+        echo "5. 享受AI资讯智能体！🎊" >> build-report.md
+        
+    - name: 📋 上传构建报告
+      uses: actions/upload-artifact@v3
+      with:
+        name: build-report
+        path: build-report.md

@@ -1,0 +1,43 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""
+AI资讯智能体 - Android APK 入口点
+针对Android平台优化的主程序入口
+"""
+
+import os
+import sys
+from pathlib import Path
+
+# 设置环境变量以支持Android平台
+if hasattr(sys, '_getframe'):
+    # 在Android上禁用某些不兼容的功能
+    os.environ['KIVY_NO_CONSOLELOG'] = '1'
+
+# 确保路径设置正确
+current_dir = Path(__file__).parent.absolute()
+sys.path.insert(0, str(current_dir))
+
+try:
+    # 导入并运行Android版本的应用
+    from main_android import AINewsApp
+    
+    if __name__ == '__main__':
+        # 启动Android版AI资讯智能体
+        AINewsApp().run()
+        
+except ImportError as e:
+    print(f"导入模块失败: {e}")
+    # 回退到原始版本（如果Android版本不可用）
+    try:
+        from kivy.app import App
+        from kivy.uix.label import Label
+        
+        class ErrorApp(App):
+            def build(self):
+                return Label(text=f'应用启动失败: {str(e)}')
+        
+        ErrorApp().run()
+    except Exception as fallback_error:
+        print(f"回退启动也失败: {fallback_error}")
+        sys.exit(1)

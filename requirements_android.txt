@@ -1,0 +1,30 @@
+# Android版本专用依赖文件
+# 用于Buildozer构建时的依赖管理
+
+# 核心框架
+kivy==2.3.0
+kivymd==1.2.0
+buildozer==1.5.0
+cython==3.1.4
+
+# 网络和数据处理
+requests==2.31.0
+beautifulsoup4==4.12.2
+feedparser==6.0.10
+lxml==4.9.3
+
+# 时间和调度
+python-dateutil==2.8.2
+schedule==1.2.0
+
+# 移动端特性（可选）
+plyer==2.1.0
+
+# 系统依赖
+sqlite3
+json
+pathlib
+logging
+threading
+configparser
+hashlib
